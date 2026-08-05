@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Hyacinth Romitman</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="statusbar">
+  <div class="statusbar-inner">
+    <div class="brand"><span class="dot"></span>HYACINTH.ROMITMAN</div>
+    <div class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section style="padding-top:64px; padding-bottom:20px;">
+    <span class="eyebrow">SIDE BOARD</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Personal Projects</h1>
+    <p class="lead" style="margin-top:14px;">
+      Built with AI-assisted development — same instinct for solving a real
+      workflow problem, just pointed at my own tools instead of a client's.
+    </p>
+  </section>
+
+  <section style="padding-top:0;">
+
+    <div class="project">
+      <div class="project-head">
+        <div>
+          <h3>Time-Off Manager</h3>
+          <p>Time-off request and tracking app with Slack integration</p>
+        </div>
+        <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
+      </div>
+      <p>
+        Built to fix a real gap in how time-off requests were tracked at work.
+        Rolling it out in phases: core request and tracking features first,
+        then Slack OAuth so it connects directly to the AppEvolve and nClouds
+        workspaces, then automated reminders on a schedule so nobody has to
+        chase approvals manually.
+      </p>
+      <div class="stack">
+        <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Vercel Cron</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <div>
+          <h3>BudgetFlow PH</h3>
+          <p>Personal finance tracker built for day-to-day money management</p>
+        </div>
+        <span class="chip coral">Live</span>
+      </div>
+      <p>
+        Started as a simple local budgeting tool and grew into a full web app —
+        bank account tracking, budget planning, cash flow views, and a notes
+        editor for keeping context next to the numbers. Rebuilt from local
+        storage into a proper synced backend so it works the same across devices.
+      </p>
+      <div class="stack">
+        <span>Supabase</span><span>Vercel</span><span>Mobile-responsive</span>
+      </div>
+      <div style="margin-top:18px;">
+        <a href="https://budget-flow-nine-delta.vercel.app" target="_blank" rel="noopener" class="btn ghost">View live app →</a>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Hyacinth Romitman</span>
+    <span>Iligan City, Lanao Del Norte, PH</span>
+  </div>
+</footer>
+
+</body>
+</html>
