@@ -9,15 +9,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root{
-  --bg:        #14163B;
-  --bg-alt:    #1B1E4D;
-  --card:      #202364;
-  --ink:       #F5F3EE;
-  --muted:     #9DA0D6;
-  --coral:     #FF5E5B;
-  --yellow:    #FFD23F;
-  --teal:      #06D6A0;
-  --line:      #34378A;
+  --bg:        #0A0A0D;
+  --bg-alt:    #131316;
+  --card:      #16171B;
+  --ink:       #F2F2F0;
+  --muted:     #85878E;
+  --coral:     #5B5E68;
+  --yellow:    #FFB020;
+  --teal:      #00D9A3;
+  --line:      #2A2C33;
 
   --display: 'Space Grotesk', sans-serif;
   --body:    'Inter', sans-serif;
@@ -75,7 +75,7 @@ img{ max-width:100%; display:block; }
 }
 .brand{
   font-family:var(--mono); font-weight:700; font-size:14px;
-  letter-spacing:0.04em; color:var(--yellow);
+  letter-spacing:0.04em; color:var(--ink);
   display:flex; align-items:center; gap:8px;
 }
 .brand .dot{
@@ -121,7 +121,7 @@ img{ max-width:100%; display:block; }
 .ticket::before{
   content:'';
   position:absolute; left:0; top:0; bottom:0; width:6px;
-  background:linear-gradient(180deg, var(--coral), var(--yellow), var(--teal));
+  background:linear-gradient(180deg, var(--teal), var(--yellow));
 }
 
 /* perforated divider, echoes a ticket stub tear-line */
@@ -154,11 +154,11 @@ section{ padding:80px 0; position:relative; z-index:1; }
   font-family:var(--mono); font-weight:700; font-size:13px;
   text-transform:uppercase; letter-spacing:0.04em;
   padding:14px 22px; border-radius:8px;
-  border:1px solid var(--coral); color:var(--bg);
-  background:var(--coral);
+  border:1px solid var(--teal); color:var(--bg);
+  background:var(--teal);
   transition:transform .15s ease, box-shadow .15s ease;
 }
-.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(255,94,91,0.3); }
+.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,217,163,0.25); }
 .btn.ghost{
   background:transparent; color:var(--ink); border-color:var(--line);
 }
@@ -192,7 +192,7 @@ section{ padding:80px 0; position:relative; z-index:1; }
   width:12px; height:12px; border-radius:50%;
   background:var(--bg); border:2px solid var(--coral);
 }
-.job.current::before{ border-color:var(--teal); box-shadow:0 0 0 4px rgba(6,214,160,0.15); }
+.job.current::before{ border-color:var(--teal); box-shadow:0 0 0 4px rgba(0,217,163,0.15); }
 .job-meta{
   font-family:var(--mono); font-size:12px; color:var(--muted);
   margin-bottom:6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
