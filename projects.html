@@ -36,20 +36,44 @@
     <div class="project">
       <div class="project-head">
         <div>
-          <h3>Time-Off Manager</h3>
-          <p>Time-off request and tracking app with Slack integration</p>
+          <h3>Off Duty</h3>
+          <p>Time-off tracking and automated Slack notifications, built for the team</p>
         </div>
         <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
       </div>
       <p>
         Built to fix a real gap in how time-off requests were tracked at work.
-        Rolling it out in phases: core request and tracking features first,
-        then Slack OAuth so it connects directly to the AppEvolve and nClouds
-        workspaces, then automated reminders on a schedule so nobody has to
-        chase approvals manually.
+        Team members, projects, and approved time off all live in one place,
+        and a scheduler automatically drafts and sends Slack notifications to
+        every affected project channel — flagging which ones have new info
+        since their last notice, so nothing gets missed.
       </p>
       <div class="stack">
-        <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Vercel Cron</span>
+        <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
+      </div>
+
+      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out.</div>
+      <div class="shot-grid">
+        <div class="shot wide">
+          <img src="screenshots/send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status">
+          <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+        </div>
+        <div class="shot">
+          <img src="screenshots/time-off-entries.png" alt="Time-off entries table with approval status">
+          <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
+        </div>
+        <div class="shot">
+          <img src="screenshots/team-members.png" alt="Team members list with employment status and holiday sets">
+          <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
+        </div>
+        <div class="shot">
+          <img src="screenshots/settings.png" alt="Settings screen for Jira connection and Slack workspace tokens">
+          <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
+        </div>
+        <div class="shot">
+          <img src="screenshots/holidays.png" alt="Holiday calendar for PH and US employees">
+          <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
+        </div>
       </div>
     </div>
 
