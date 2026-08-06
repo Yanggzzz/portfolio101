@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projects — Hyacinth Romitman</title>
+<title>Projects — Hyacinth Romitman Portfolio</title>
+<meta property="og:title" content="Projects — Hyacinth Romitman Portfolio">
+<meta property="og:description" content="Project operations coordinator moving into data analytics. Experience, tools, and personal projects.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Projects — Hyacinth Romitman Portfolio">
+<meta name="twitter:description" content="Project operations coordinator moving into data analytics. Experience, tools, and personal projects.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -52,29 +58,34 @@
         <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
       </div>
 
-      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out.</div>
+      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click any screenshot to view it larger.</div>
       <div class="shot-grid">
         <div class="shot wide">
-          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status">
+          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
           <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
         </div>
         <div class="shot">
-          <img src="time-off-entries.png" alt="Time-off entries table with approval status">
+          <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
           <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
         </div>
         <div class="shot">
-          <img src="team-members.png" alt="Team members list with employment status and holiday sets">
+          <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
           <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
         </div>
         <div class="shot">
-          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens">
+          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
           <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
         </div>
         <div class="shot">
-          <img src="holidays.png" alt="Holiday calendar for PH and US employees">
+          <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
           <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
         </div>
       </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+      <img id="lightbox-img" src="" alt="">
     </div>
 
     <div class="project">
@@ -109,6 +120,24 @@
     <span>Iligan City, Lanao Del Norte, PH</span>
   </div>
 </footer>
+
+<script>
+function openLightbox(imgEl){
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  lbImg.src = imgEl.src;
+  lbImg.alt = imgEl.alt;
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') closeLightbox();
+});
+</script>
 
 </body>
 </html>
