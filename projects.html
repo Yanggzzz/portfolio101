@@ -32,98 +32,41 @@
     <span class="eyebrow">SIDE BOARD</span>
     <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Personal Projects</h1>
     <p class="lead" style="margin-top:14px;">
-      Built with AI-assisted development — same instinct for solving a real
-      workflow problem, just pointed at my own tools instead of a client's.
+      Developed with AI-assisted coding, combining problem-solving and
+      technical experimentation to create a practical workflow tool.
     </p>
   </section>
 
   <section style="padding-top:0;">
+    <div class="project-grid">
 
-    <div class="project">
-      <div class="project-head">
-        <div>
-          <h3>Off Duty</h3>
-          <p>Time-off tracking and automated Slack notifications, built for the team</p>
+      <div class="project-tile" onclick="openModal('off-duty')">
+        <div class="tile-thumb">
+          <img src="send-notif.png" alt="Off Duty app preview">
         </div>
-        <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
-      </div>
-      <p>
-        Built to fix a real gap in how time-off requests were tracked at work.
-        Team members, projects, and approved time off all live in one place,
-        and a scheduler automatically drafts and sends Slack notifications to
-        every affected project channel — flagging which ones have new info
-        since their last notice, so nothing gets missed.
-      </p>
-      <div class="stack">
-        <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
-      </div>
-
-      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click a screenshot to view it larger.</div>
-
-      <div class="carousel">
-        <div class="carousel-track">
-          <div class="carousel-slide active">
-            <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
-            <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+        <div class="tile-body">
+          <div class="project-head" style="margin-bottom:0;">
+            <h3>Off Duty</h3>
+            <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
           </div>
-          <div class="carousel-slide">
-            <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
-            <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
-          </div>
-          <div class="carousel-slide">
-            <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
-            <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
-          </div>
-          <div class="carousel-slide">
-            <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
-            <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
-          </div>
-          <div class="carousel-slide">
-            <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
-            <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
-          </div>
-        </div>
-
-        <button class="carousel-arrow prev" onclick="carouselMove(-1)" aria-label="Previous screenshot">‹</button>
-        <button class="carousel-arrow next" onclick="carouselMove(1)" aria-label="Next screenshot">›</button>
-
-        <div class="carousel-dots">
-          <span class="carousel-dot active" onclick="carouselGoTo(0)"></span>
-          <span class="carousel-dot" onclick="carouselGoTo(1)"></span>
-          <span class="carousel-dot" onclick="carouselGoTo(2)"></span>
-          <span class="carousel-dot" onclick="carouselGoTo(3)"></span>
-          <span class="carousel-dot" onclick="carouselGoTo(4)"></span>
+          <p style="margin-top:8px;">Time-off tracking and automated Slack notifications, built for the team</p>
         </div>
       </div>
+
+      <div class="project-tile" onclick="openModal('budgetflow')">
+        <div class="tile-thumb">
+          <span class="tile-placeholder">BF</span>
+        </div>
+        <div class="tile-body">
+          <div class="project-head" style="margin-bottom:0;">
+            <h3>BudgetFlow PH</h3>
+            <span class="chip teal">Live</span>
+          </div>
+          <p style="margin-top:8px;">Personal finance tracker built for day-to-day money management</p>
+        </div>
+      </div>
+
     </div>
-
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
-      <img id="lightbox-img" src="" alt="">
-    </div>
-
-    <div class="project">
-      <div class="project-head">
-        <div>
-          <h3>BudgetFlow PH</h3>
-          <p>Personal finance tracker built for day-to-day money management</p>
-        </div>
-        <span class="chip teal">Live</span>
-      </div>
-      <p>
-        Started as a simple local budgeting tool and grew into a full web app —
-        bank account tracking, budget planning, cash flow views, and a notes
-        editor for keeping context next to the numbers. Rebuilt from local
-        storage into a proper synced backend so it works the same across devices.
-      </p>
-      <div class="stack">
-        <span>Supabase</span><span>Vercel</span><span>Mobile-responsive</span>
-      </div>
-      <div style="margin-top:18px;">
-        <a href="https://budget-flow-nine-delta.vercel.app" target="_blank" rel="noopener" class="btn ghost">View live app →</a>
-      </div>
-    </div>
-
   </section>
 
 </main>
@@ -135,7 +78,120 @@
   </div>
 </footer>
 
+<!-- ===== Off Duty modal ===== -->
+<div id="modal-off-duty" class="project-modal" onclick="closeModalOnBackdrop(event)">
+  <div class="project-modal-panel">
+    <button class="project-modal-close" onclick="closeModal('off-duty')" aria-label="Close">✕</button>
+
+    <div class="project-head">
+      <div>
+        <h3>Off Duty</h3>
+        <p>Time-off tracking and automated Slack notifications, built for the team</p>
+      </div>
+      <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
+    </div>
+    <p>
+      Built to fix a real gap in how time-off requests were tracked at work.
+      Team members, projects, and approved time off all live in one place,
+      and a scheduler automatically drafts and sends Slack notifications to
+      every affected project channel — flagging which ones have new info
+      since their last notice, so nothing gets missed.
+    </p>
+    <div class="stack">
+      <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
+    </div>
+
+    <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click a screenshot to view it larger.</div>
+
+    <div class="carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide active">
+          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
+          <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
+          <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
+          <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
+          <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
+          <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
+        </div>
+      </div>
+
+      <button class="carousel-arrow prev" onclick="carouselMove(-1)" aria-label="Previous screenshot">‹</button>
+      <button class="carousel-arrow next" onclick="carouselMove(1)" aria-label="Next screenshot">›</button>
+
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="carouselGoTo(0)"></span>
+        <span class="carousel-dot" onclick="carouselGoTo(1)"></span>
+        <span class="carousel-dot" onclick="carouselGoTo(2)"></span>
+        <span class="carousel-dot" onclick="carouselGoTo(3)"></span>
+        <span class="carousel-dot" onclick="carouselGoTo(4)"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BudgetFlow PH modal ===== -->
+<div id="modal-budgetflow" class="project-modal" onclick="closeModalOnBackdrop(event)">
+  <div class="project-modal-panel">
+    <button class="project-modal-close" onclick="closeModal('budgetflow')" aria-label="Close">✕</button>
+
+    <div class="project-head">
+      <div>
+        <h3>BudgetFlow PH</h3>
+        <p>Personal finance tracker built for day-to-day money management</p>
+      </div>
+      <span class="chip teal">Live</span>
+    </div>
+    <p>
+      Started as a simple local budgeting tool and grew into a full web app —
+      bank account tracking, budget planning, cash flow views, and a notes
+      editor for keeping context next to the numbers. Rebuilt from local
+      storage into a proper synced backend so it works the same across devices.
+    </p>
+    <div class="stack">
+      <span>Supabase</span><span>Vercel</span><span>Mobile-responsive</span>
+    </div>
+    <div style="margin-top:18px;">
+      <a href="https://budget-flow-nine-delta.vercel.app" target="_blank" rel="noopener" class="btn ghost">View live app →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Screenshot lightbox (used inside the Off Duty carousel) ===== -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
+// ── Project detail modals ──
+function openModal(id){
+  document.getElementById('modal-' + id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id){
+  document.getElementById('modal-' + id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeModalOnBackdrop(e){
+  if (e.target.classList.contains('project-modal')){
+    e.target.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// ── Screenshot lightbox ──
 function openLightbox(imgEl){
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightbox-img');
@@ -148,8 +204,15 @@ function closeLightbox(){
   document.getElementById('lightbox').classList.remove('active');
   document.body.style.overflow = '';
 }
+
 document.addEventListener('keydown', function(e){
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape'){
+    closeLightbox();
+    document.querySelectorAll('.project-modal.active').forEach(function(m){
+      m.classList.remove('active');
+    });
+    document.body.style.overflow = '';
+  }
 });
 
 // ── Off Duty screenshot carousel ──
