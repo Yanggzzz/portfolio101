@@ -58,27 +58,41 @@
         <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
       </div>
 
-      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click any screenshot to view it larger.</div>
-      <div class="shot-grid">
-        <div class="shot wide">
-          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
-          <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+      <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click a screenshot to view it larger.</div>
+
+      <div class="carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide active">
+            <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
+            <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
+            <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
+            <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
+            <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
+            <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
+          </div>
         </div>
-        <div class="shot">
-          <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
-          <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
-        </div>
-        <div class="shot">
-          <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
-          <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
-        </div>
-        <div class="shot">
-          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
-          <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
-        </div>
-        <div class="shot">
-          <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
-          <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
+
+        <button class="carousel-arrow prev" onclick="carouselMove(-1)" aria-label="Previous screenshot">‹</button>
+        <button class="carousel-arrow next" onclick="carouselMove(1)" aria-label="Next screenshot">›</button>
+
+        <div class="carousel-dots">
+          <span class="carousel-dot active" onclick="carouselGoTo(0)"></span>
+          <span class="carousel-dot" onclick="carouselGoTo(1)"></span>
+          <span class="carousel-dot" onclick="carouselGoTo(2)"></span>
+          <span class="carousel-dot" onclick="carouselGoTo(3)"></span>
+          <span class="carousel-dot" onclick="carouselGoTo(4)"></span>
         </div>
       </div>
     </div>
@@ -137,6 +151,18 @@ function closeLightbox(){
 document.addEventListener('keydown', function(e){
   if (e.key === 'Escape') closeLightbox();
 });
+
+// ── Off Duty screenshot carousel ──
+let carouselIndex = 0;
+function carouselShow(i){
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+  carouselIndex = (i + slides.length) % slides.length;
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === carouselIndex));
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === carouselIndex));
+}
+function carouselMove(delta){ carouselShow(carouselIndex + delta); }
+function carouselGoTo(i){ carouselShow(i); }
 </script>
 
 </body>
