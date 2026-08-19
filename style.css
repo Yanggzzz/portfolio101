@@ -6,7 +6,7 @@
    and the palette is bold enough to read as a dashboard, not a resume.
 =================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root{
   --bg:        #272829;
@@ -19,8 +19,8 @@
   --teal:      #F0BF6C;
   --line:      #3D3E42;
 
-  --display: 'Space Grotesk', sans-serif;
-  --body:    'Inter', sans-serif;
+  --display: 'Roboto Slab', serif;
+  --body:    'Poppins', sans-serif;
   --mono:    'JetBrains Mono', monospace;
 }
 
@@ -74,8 +74,8 @@ img{ max-width:100%; display:block; }
   gap:24px; flex-wrap:wrap;
 }
 .brand{
-  font-family:var(--mono); font-weight:700; font-size:14px;
-  letter-spacing:0.04em; color:var(--ink);
+  font-family:var(--display); font-weight:700; font-size:16px;
+  letter-spacing:0.02em; color:var(--ink);
   display:flex; align-items:center; gap:8px;
 }
 .brand .dot{
@@ -86,7 +86,7 @@ img{ max-width:100%; display:block; }
 }
 @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 
-.navlinks{ display:flex; gap:8px; font-family:var(--mono); font-size:13px; }
+.navlinks{ display:flex; gap:8px; font-family:var(--body); font-size:13.5px; }
 .navlinks a{
   padding:8px 14px; border-radius:6px;
   color:var(--muted);
@@ -132,10 +132,10 @@ img{ max-width:100%; display:block; }
 }
 
 /* ---------- HEADINGS ---------- */
-h1,h2,h3{ font-family:var(--display); font-weight:700; letter-spacing:-0.01em; }
+h1,h2{ font-family:var(--display); font-weight:700; letter-spacing:-0.01em; }
 h1{ font-size:clamp(2.4rem, 5vw, 3.6rem); line-height:1.05; }
 h2{ font-size:clamp(1.6rem, 3vw, 2.2rem); margin-bottom:20px; }
-h3{ font-size:1.15rem; }
+h3{ font-family:var(--body); font-weight:400; font-size:1.15rem; }
 
 .eyebrow{
   font-family:var(--mono); font-size:12px; color:var(--muted);
@@ -151,7 +151,7 @@ section{ padding:80px 0; position:relative; z-index:1; }
 /* ---------- BUTTONS ---------- */
 .btn{
   display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-weight:700; font-size:13px;
+  font-family:var(--body); font-weight:500; font-size:13.5px;
   text-transform:uppercase; letter-spacing:0.04em;
   padding:14px 22px; border-radius:8px;
   border:1px solid var(--teal); color:var(--bg);
