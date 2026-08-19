@@ -422,7 +422,7 @@ footer .wrap{
 /* ---------- LIGHTBOX ---------- */
 .lightbox{
   display:none;
-  position:fixed; inset:0; z-index:200;
+  position:fixed; inset:0; z-index:400;
   background:rgba(5,5,7,0.92);
   align-items:center; justify-content:center;
   padding:40px;
