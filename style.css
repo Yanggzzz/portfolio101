@@ -88,6 +88,7 @@ img{ max-width:100%; display:block; }
 
 .navlinks{ display:flex; gap:8px; font-family:var(--mono); font-size:13px; }
 .navlinks a{
+  position:relative;
   padding:8px 14px; border-radius:6px;
   color:var(--muted);
   border:1px solid transparent;
@@ -96,6 +97,14 @@ img{ max-width:100%; display:block; }
 .navlinks a:hover, .navlinks a.active{
   color:var(--ink); border-color:var(--line); background:var(--bg-alt);
 }
+.navlinks a::after{
+  content:'';
+  position:absolute; left:14px; right:14px; bottom:3px; height:2px;
+  background:var(--teal); border-radius:2px;
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.navlinks a:hover::after, .navlinks a.active::after{ transform:scaleX(1); }
 
 /* ---------- TICKET CHIP (status labels) ---------- */
 .chip{
@@ -117,12 +126,27 @@ img{ max-width:100%; display:block; }
   border-radius:16px;
   padding:48px;
   overflow:hidden;
+  --mx:50%; --my:50%;
 }
 .ticket::before{
   content:'';
   position:absolute; left:0; top:0; bottom:0; width:6px;
-  background:linear-gradient(180deg, var(--teal), var(--yellow));
+  background:linear-gradient(180deg, var(--teal), var(--yellow), var(--teal));
+  background-size:100% 240%;
+  animation:shimmerStripe 7s ease-in-out infinite;
 }
+@keyframes shimmerStripe{
+  0%,100%{ background-position:0% 0%; }
+  50%{ background-position:0% 100%; }
+}
+.ticket::after{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(circle at var(--mx) var(--my), rgba(240,191,108,0.16), transparent 55%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none;
+}
+.ticket:hover::after{ opacity:1; }
 
 /* perforated divider, echoes a ticket stub tear-line */
 .perf{
@@ -174,9 +198,9 @@ section{ padding:80px 0; position:relative; z-index:1; }
   border:1px solid var(--line);
   border-radius:14px;
   padding:28px;
-  transition:border-color .15s ease, transform .15s ease;
+  transition:border-color .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
 }
-.card:hover{ border-color:var(--teal); transform:translateY(-3px); }
+.card:hover{ border-color:var(--teal); transform:translateY(-4px); }
 
 /* ---------- EXPERIENCE TIMELINE ---------- */
 .job{
@@ -268,14 +292,15 @@ section{ padding:80px 0; position:relative; z-index:1; }
 .project-tile{
   background:var(--card); border:1px solid var(--line); border-radius:16px;
   overflow:hidden; cursor:pointer;
-  transition:border-color .15s ease, transform .15s ease;
+  transition:border-color .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
 }
-.project-tile:hover{ border-color:var(--teal); transform:translateY(-3px); }
+.project-tile:hover{ border-color:var(--teal); transform:translateY(-5px); }
+.project-tile:hover .tile-thumb img{ transform:scale(1.05); }
 .tile-thumb{
   aspect-ratio:16/9; overflow:hidden; background:var(--bg);
   display:flex; align-items:center; justify-content:center;
 }
-.tile-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.tile-thumb img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s ease; }
 .tile-thumb.icon{ padding:36px; }
 .tile-thumb.icon img{
   width:auto; height:100%; max-width:60%; object-fit:contain;
@@ -419,59 +444,6 @@ footer .wrap{
   .carousel-arrow{ width:32px; height:32px; font-size:16px; }
 }
 
-/* ---------- COMMAND PALETTE ---------- */
-.cmdk-trigger{
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:12px; color:var(--muted);
-  background:transparent; border:1px solid var(--line); border-radius:7px;
-  padding:7px 10px; cursor:pointer;
-  transition:border-color .15s ease, color .15s ease;
-}
-.cmdk-trigger:hover{ border-color:var(--teal); color:var(--ink); }
-.cmdk-key{
-  font-family:var(--mono); font-size:11px; color:var(--ink);
-  background:var(--bg-alt); border:1px solid var(--line); border-radius:4px;
-  padding:1px 6px;
-}
-
-.cmdk-overlay{
-  display:none;
-  position:fixed; inset:0; z-index:500;
-  background:rgba(10,10,11,0.75);
-  align-items:flex-start; justify-content:center;
-  padding-top:14vh;
-}
-.cmdk-overlay.active{ display:flex; }
-.cmdk-panel{
-  width:100%; max-width:560px; margin:0 20px;
-  background:var(--card); border:1px solid var(--line); border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,0.5);
-}
-.cmdk-input{
-  width:100%; box-sizing:border-box;
-  background:transparent; border:none; border-bottom:1px solid var(--line);
-  outline:none; color:var(--ink);
-  font-family:var(--body); font-size:15px;
-  padding:18px 20px;
-}
-.cmdk-input::placeholder{ color:var(--muted); }
-.cmdk-list{ max-height:340px; overflow-y:auto; padding:8px; }
-.cmdk-item{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:11px 12px; border-radius:8px; cursor:pointer;
-  font-family:var(--body); font-size:14px; color:var(--ink);
-}
-.cmdk-item.active{ background:var(--bg-alt); }
-.cmdk-hint{
-  font-family:var(--mono); font-size:10.5px; color:var(--muted);
-  text-transform:uppercase; letter-spacing:0.05em;
-}
-.cmdk-empty{
-  padding:24px 12px; text-align:center;
-  font-family:var(--mono); font-size:12.5px; color:var(--muted);
-}
-
 /* ---------- LIGHTBOX ---------- */
 .lightbox{
   display:none;
@@ -505,6 +477,27 @@ footer .wrap{
   .statusbar-inner{ padding:14px 20px; }
   .wrap{ padding:0 20px; }
   section{ padding:56px 0; }
+}
+
+/* ---------- SCROLL REVEAL + LOAD MOTION ---------- */
+/* Gated behind .js-ready (added by interactions.js) so content is fully
+   visible by default if JS is ever unavailable — never hidden forever. */
+.js-ready .reveal{
+  opacity:0; transform:translateY(24px);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.js-ready .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+.js-ready .skillset .skill{
+  opacity:0; transform:translateY(8px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+.js-ready .skillset.in-view .skill{ opacity:1; transform:translateY(0); }
+
+body{ animation:pageFadeIn .5s ease both; }
+@keyframes pageFadeIn{
+  from{ opacity:0; transform:translateY(6px); }
+  to{ opacity:1; transform:translateY(0); }
 }
 
 /* respect reduced motion */
