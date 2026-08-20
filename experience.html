@@ -23,6 +23,7 @@
       <a href="projects.html">Projects</a>
       <a href="contact.html">Contact</a>
     </div>
+    <button class="cmdk-trigger" data-cmdk-trigger type="button">Quick nav <span class="cmdk-key">Ctrl K</span></button>
   </div>
 </nav>
 
@@ -33,7 +34,7 @@
     <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Experience</h1>
   </section>
 
-  <section style="padding-top:0;">
+  <section id="work-log" style="padding-top:0;">
 
     <div class="job current">
       <div class="job-meta">
@@ -75,7 +76,7 @@
 
   <hr class="perf">
 
-  <section style="padding-top:0;">
+  <section id="certifications" style="padding-top:0;">
     <span class="eyebrow">CERTIFICATIONS</span>
     <h2>Courses &amp; credentials</h2>
 
@@ -115,7 +116,7 @@
 
   <hr class="perf">
 
-  <section style="padding-top:0;">
+  <section id="recognition" style="padding-top:0;">
     <span class="eyebrow">RECOGNITION</span>
     <h2>Awards</h2>
     <div class="cert-card">
@@ -134,7 +135,7 @@
 
   <hr class="perf">
 
-  <section style="padding-top:0;">
+  <section id="testimonials" style="padding-top:0;">
     <span class="eyebrow">TESTIMONIALS</span>
     <h2>What colleagues say</h2>
     <div class="testimonial-grid">
@@ -170,7 +171,7 @@
 
   <hr class="perf">
 
-  <section style="padding-top:0;">
+  <section id="education" style="padding-top:0;">
     <span class="eyebrow">EDUCATION</span>
     <div class="card" style="max-width:520px;">
       <h3>B.S. Psychology</h3>
@@ -178,7 +179,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="skills-board">
     <span class="eyebrow">SKILLS BOARD</span>
     <h2>By category</h2>
 
@@ -232,6 +233,18 @@
     <span>Iligan City, Lanao Del Norte, PH</span>
   </div>
 </footer>
+
+<script>
+window.pageCommands = [
+  { label: 'Jump to Work Log', hint: 'Section', action: () => document.getElementById('work-log').scrollIntoView({behavior:'smooth'}) },
+  { label: 'Jump to Certifications', hint: 'Section', action: () => document.getElementById('certifications').scrollIntoView({behavior:'smooth'}) },
+  { label: 'Jump to Recognition', hint: 'Section', action: () => document.getElementById('recognition').scrollIntoView({behavior:'smooth'}) },
+  { label: 'Jump to Testimonials', hint: 'Section', action: () => document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}) },
+  { label: 'Jump to Education', hint: 'Section', action: () => document.getElementById('education').scrollIntoView({behavior:'smooth'}) },
+  { label: 'Jump to Skills Board', hint: 'Section', action: () => document.getElementById('skills-board').scrollIntoView({behavior:'smooth'}) }
+];
+</script>
+<script src="command-palette.js"></script>
 
 </body>
 </html>

@@ -23,6 +23,7 @@
       <a href="projects.html">Projects</a>
       <a href="contact.html" class="active">Contact</a>
     </div>
+    <button class="cmdk-trigger" data-cmdk-trigger type="button">Quick nav <span class="cmdk-key">Ctrl K</span></button>
   </div>
 </nav>
 
@@ -67,6 +68,13 @@
     <span>Iligan City, Lanao Del Norte, PH</span>
   </div>
 </footer>
+
+<script>
+window.pageCommands = [
+  { label: 'Copy email address', hint: 'Action', action: () => navigator.clipboard.writeText('hyacinthh.romitman5211@gmail.com') }
+];
+</script>
+<script src="command-palette.js"></script>
 
 </body>
 </html>
