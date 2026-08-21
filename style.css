@@ -500,6 +500,82 @@ body{ animation:pageFadeIn .5s ease both; }
   to{ opacity:1; transform:translateY(0); }
 }
 
+/* ---------- EXPERIENCE PAGE: VERTICAL CARD CAROUSEL ---------- */
+/* body.xp-page traps page-level scroll — the carousel below manages its
+   own scrolling per slide, so navigating between sections and reading a
+   tall section don't fight over the same scrollbar. */
+body.xp-page{ height:100vh; height:100dvh; overflow:hidden; }
+
+.xp-carousel{
+  position:relative;
+  height:calc(100vh - var(--nav-h, 65px));
+  height:calc(100dvh - var(--nav-h, 65px));
+  overflow:hidden;
+}
+.xp-track{
+  height:100%;
+  transition:transform .6s cubic-bezier(.65,0,.35,1);
+}
+.xp-slide{
+  height:calc(100vh - var(--nav-h, 65px));
+  height:calc(100dvh - var(--nav-h, 65px));
+  display:flex; align-items:flex-start;
+}
+.xp-slide-inner{
+  width:100%; height:100%;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:56px 0 64px;
+}
+.xp-slide-inner::-webkit-scrollbar{ width:6px; }
+.xp-slide-inner::-webkit-scrollbar-thumb{ background:var(--line); border-radius:3px; }
+
+.xp-footer{
+  margin-top:56px; padding-top:24px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+}
+
+/* right-edge nav rail: up arrow, dots, down arrow */
+.xp-nav{
+  position:fixed; right:28px; top:50%; transform:translateY(-50%);
+  z-index:60;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+}
+.xp-arrow{
+  width:34px; height:34px; border-radius:50%;
+  background:var(--card); border:1px solid var(--line); color:var(--ink);
+  font-size:12px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.xp-arrow:hover{ border-color:var(--teal); color:var(--teal); }
+.xp-arrow:active{ transform:scale(0.92); }
+.xp-arrow:disabled{ opacity:0.3; cursor:default; }
+.xp-arrow:disabled:hover{ border-color:var(--line); color:var(--ink); }
+
+.xp-dots{ display:flex; flex-direction:column; gap:10px; padding:6px 0; }
+.xp-dot{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--line); cursor:pointer;
+  transition:background .15s ease, transform .15s ease;
+}
+.xp-dot:hover{ transform:scale(1.25); }
+.xp-dot.active{ background:var(--teal); transform:scale(1.3); }
+
+.xp-progress{
+  position:fixed; left:28px; bottom:24px; z-index:60;
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+  letter-spacing:0.08em;
+}
+
+@media (max-width:760px){
+  .xp-nav{ right:14px; gap:10px; }
+  .xp-arrow{ width:28px; height:28px; font-size:10px; }
+  .xp-progress{ left:14px; bottom:14px; }
+  .xp-slide-inner{ padding:40px 0 56px; }
+}
+
 /* respect reduced motion */
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
