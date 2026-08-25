@@ -500,91 +500,46 @@ body{ animation:pageFadeIn .5s ease both; }
   to{ opacity:1; transform:translateY(0); }
 }
 
-/* ---------- EXPERIENCE PAGE: HORIZONTAL PEEK CAROUSEL ---------- */
-.exp-carousel{
-  position:relative;
-  padding:36px 0 8px;
-}
-.exp-track{
-  display:flex; gap:16px; align-items:flex-end;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
+/* ---------- EXPERIENCE PAGE: TAB BAR ---------- */
+.exp-tabs-wrap{
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none;
-  padding:20px calc(50% - min(260px, 41vw)) 0;
-  cursor:grab;
+  margin-bottom:36px;
 }
-.exp-track::-webkit-scrollbar{ display:none; }
-.exp-track.dragging{ cursor:grabbing; scroll-snap-type:none; }
+.exp-tabs-wrap::-webkit-scrollbar{ display:none; }
 
-.exp-card{
-  flex-shrink:0; scroll-snap-align:center;
-  width:min(520px, 82vw); height:460px;
-  background:var(--card); border:1px solid var(--line); border-radius:18px;
-  box-shadow:0 10px 24px rgba(0,0,0,0.3);
-  display:flex; flex-direction:column; overflow:hidden;
-  transform-origin:center bottom;
-  transition:transform .12s linear, opacity .12s linear,
-             box-shadow .35s ease, border-color .3s ease;
-  /* transform, opacity, and z-index below are driven continuously by JS
-     as you drag/scroll, so the card grows smoothly the closer it gets
-     to center instead of snapping between two fixed states */
+.exp-tabs{
+  position:relative;
+  display:inline-flex; gap:2px;
+  background:var(--card); border:1px solid var(--line);
+  border-radius:999px; padding:6px;
 }
-.exp-card.active{
-  border-color:var(--teal);
-  box-shadow:0 26px 54px rgba(0,0,0,0.45);
+.exp-tab-highlight{
+  position:absolute; top:6px; bottom:6px; left:6px; width:0;
+  background:var(--bg-alt); border:1px solid var(--teal);
+  border-radius:999px;
+  transition:transform .35s cubic-bezier(.65,0,.35,1), width .35s cubic-bezier(.65,0,.35,1);
+  z-index:0;
 }
+.exp-tab{
+  position:relative; z-index:1;
+  display:flex; align-items:center; gap:8px;
+  padding:11px 20px; border:none; background:transparent;
+  color:var(--muted); font-family:var(--body); font-size:13.5px; font-weight:500;
+  white-space:nowrap; cursor:pointer; border-radius:999px;
+  transition:color .2s ease;
+}
+.exp-tab svg{ width:16px; height:16px; flex-shrink:0; }
+.exp-tab:hover{ color:var(--ink); }
+.exp-tab.active{ color:var(--ink); }
 
-.exp-head{
-  padding:24px; display:flex; align-items:flex-start; gap:14px; flex-shrink:0;
-}
-.exp-badge{
-  flex-shrink:0;
-  font-family:var(--mono); font-weight:700; font-size:12px;
-  color:var(--teal); border:1px solid var(--teal); border-radius:6px;
-  width:34px; height:34px; display:flex; align-items:center; justify-content:center;
-}
-.exp-title-wrap{ display:flex; flex-direction:column; gap:6px; min-width:0; margin-top:4px; }
-.exp-title{ font-family:var(--display); font-weight:700; font-size:1.15rem; color:var(--ink); }
-.exp-teaser{ font-family:var(--body); font-size:13px; color:var(--muted); line-height:1.4; }
-
-.exp-body-wrap{
-  flex:1; min-height:0;
-  display:grid; grid-template-rows:0fr;
-  transition:grid-template-rows .4s cubic-bezier(.65,0,.35,1);
-}
-.exp-card.active .exp-body-wrap{ grid-template-rows:1fr; }
-.exp-body-inner{ overflow-y:auto; min-height:0; }
-.exp-body{ padding:0 24px 24px; }
-
-.exp-arrow{
-  position:absolute; top:50%; transform:translateY(-50%);
-  width:42px; height:42px; border-radius:50%;
-  background:var(--card); border:1px solid var(--line); color:var(--ink);
-  font-size:18px; cursor:pointer; z-index:10;
-  display:flex; align-items:center; justify-content:center;
-  transition:border-color .15s ease, color .15s ease;
-}
-.exp-arrow:hover{ border-color:var(--teal); color:var(--teal); }
-.exp-arrow.prev{ left:8px; }
-.exp-arrow.next{ right:8px; }
-
-.exp-dots{
-  display:flex; justify-content:center; gap:9px; margin:20px 0 64px;
-}
-.exp-dot{
-  width:8px; height:8px; border-radius:50%;
-  background:var(--line); cursor:pointer;
-  transition:background .15s ease, transform .15s ease;
-}
-.exp-dot:hover{ transform:scale(1.25); }
-.exp-dot.active{ background:var(--teal); transform:scale(1.3); }
+.exp-panel{ display:none; }
+.exp-panel.active{ display:block; }
 
 @media (max-width:760px){
-  .exp-card{ height:420px; }
-  .exp-arrow{ width:34px; height:34px; font-size:15px; }
-  .exp-arrow.prev{ left:4px; }
-  .exp-arrow.next{ right:4px; }
+  .exp-tab{ padding:10px 14px; font-size:12.5px; }
+  .exp-tab span{ display:none; }
+  .exp-tab svg{ width:18px; height:18px; }
 }
 
 /* respect reduced motion */

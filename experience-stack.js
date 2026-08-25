@@ -1,111 +1,47 @@
-// ===== Experience page: horizontal peek carousel =====
-// The centered card grows to full size with a bottom-anchored scale, so it
-// visually "stands taller" like a fanned deck — sizing is recalculated
-// continuously as you drag, not just switched on/off at rest.
+// ===== Experience page: tab bar =====
+// Click a tab to switch sections. A pill highlight slides smoothly to
+// whichever tab is active, and keyboard arrow keys move between tabs
+// when one of them has focus (standard tab-list behavior).
 (function () {
-  const carousel = document.getElementById('exp-carousel');
-  if (!carousel) return; // not the Experience page
+  const tabsEl = document.getElementById('exp-tabs');
+  if (!tabsEl) return; // not the Experience page
 
-  const track = document.getElementById('exp-track');
-  const cards = Array.from(track.querySelectorAll('.exp-card'));
-  const dots = Array.from(document.querySelectorAll('.exp-dot'));
-  const prevBtn = document.getElementById('exp-prev');
-  const nextBtn = document.getElementById('exp-next');
+  const highlight = document.getElementById('exp-tab-highlight');
+  const tabs = Array.from(tabsEl.querySelectorAll('.exp-tab'));
+  const panels = Array.from(document.querySelectorAll('.exp-panel'));
 
-  let current = 0;
-  let rafPending = false;
+  function moveHighlightTo(tab) {
+    highlight.style.width = tab.offsetWidth + 'px';
+    highlight.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+  }
 
-  // ---- Size/dim/layer every card continuously based on live distance
-  //      from center, and track which one is currently closest ----
-  function updateActive() {
-    const trackRect = track.getBoundingClientRect();
-    const centerX = trackRect.left + trackRect.width / 2;
-    const maxDist = trackRect.width / 2 + 40;
-
-    let closestIndex = 0;
-    let closestDist = Infinity;
-
-    cards.forEach((card, i) => {
-      const r = card.getBoundingClientRect();
-      const cardCenter = r.left + r.width / 2;
-      const dist = Math.abs(cardCenter - centerX);
-      const t = Math.min(dist / maxDist, 1); // 0 = centered, 1 = far off to the side
-
-      const scale = 1 - t * 0.22;   // full size at center, ~78% at the edges
-      const opacity = 1 - t * 0.35; // fully visible at center, still readable at the edges
-      const z = Math.round(10 - t * 9);
-
-      card.style.transform = 'scale(' + scale.toFixed(3) + ')';
-      card.style.opacity = opacity.toFixed(3);
-      card.style.zIndex = z;
-
-      if (dist < closestDist) { closestDist = dist; closestIndex = i; }
+  function activate(index) {
+    tabs.forEach((tab, i) => {
+      const isActive = i === index;
+      tab.classList.toggle('active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
-
-    if (closestIndex !== current || !cards[current].classList.contains('active')) {
-      current = closestIndex;
-      cards.forEach((card, i) => card.classList.toggle('active', i === current));
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
-    }
+    panels.forEach((panel, i) => panel.classList.toggle('active', i === index));
+    moveHighlightTo(tabs[index]);
   }
 
-  function onScroll() {
-    if (rafPending) return;
-    rafPending = true;
-    requestAnimationFrame(() => { updateActive(); rafPending = false; });
-  }
-
-  track.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-
-  // ---- Jump to a specific card, centered ----
-  function scrollToIndex(index) {
-    index = Math.max(0, Math.min(cards.length - 1, index));
-    const card = cards[index];
-    const target = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
-    track.scrollTo({ left: target, behavior: 'smooth' });
-  }
-
-  prevBtn.addEventListener('click', () => scrollToIndex(current - 1));
-  nextBtn.addEventListener('click', () => scrollToIndex(current + 1));
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => scrollToIndex(parseInt(dot.dataset.index, 10)));
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activate(i));
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') scrollToIndex(current - 1);
-    else if (e.key === 'ArrowRight') scrollToIndex(current + 1);
+  tabsEl.addEventListener('keydown', (e) => {
+    const current = tabs.findIndex(t => t.classList.contains('active'));
+    if (e.key === 'ArrowRight') { e.preventDefault(); activate((current + 1) % tabs.length); tabs[(current + 1) % tabs.length].focus(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); const prev = (current - 1 + tabs.length) % tabs.length; activate(prev); tabs[prev].focus(); }
   });
 
-  // ---- Mouse click-and-drag to scroll (touch already scrolls natively) ----
-  let isDragging = false;
-  let dragStartX = 0;
-  let scrollStart = 0;
-
-  track.addEventListener('pointerdown', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    isDragging = true;
-    dragStartX = e.clientX;
-    scrollStart = track.scrollLeft;
-    track.classList.add('dragging');
-    track.setPointerCapture(e.pointerId);
+  // Keep the highlight aligned if the window resizes (tab widths can change,
+  // especially on mobile where labels hide and only icons remain).
+  window.addEventListener('resize', () => {
+    const current = tabs.findIndex(t => t.classList.contains('active'));
+    moveHighlightTo(tabs[current === -1 ? 0 : current]);
   });
 
-  track.addEventListener('pointermove', (e) => {
-    if (!isDragging) return;
-    track.scrollLeft = scrollStart - (e.clientX - dragStartX);
-  });
-
-  function endDrag(e) {
-    if (!isDragging) return;
-    isDragging = false;
-    track.classList.remove('dragging');
-    // Let scroll-snap settle to the nearest card now that dragging is done.
-    scrollToIndex(current);
-  }
-  track.addEventListener('pointerup', endDrag);
-  track.addEventListener('pointerleave', endDrag);
-
-  // ---- Initial state ----
-  updateActive();
+  // Initial position — wait a tick so fonts/layout have settled.
+  requestAnimationFrame(() => moveHighlightTo(tabs[0]));
 })();
