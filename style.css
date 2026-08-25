@@ -631,12 +631,12 @@ footer .wrap{
   display:flex; align-items:center; gap:10px;
 }
 .shot-strip{
-  display:flex; gap:14px;
+  display:flex; gap:0;
   overflow-x:auto; scroll-snap-type:x proximity;
   scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none;
-  padding:4px 2px 8px;
+  padding:4px 30px 8px 2px;
   cursor:grab;
 }
 .shot-strip::-webkit-scrollbar{ display:none; }
@@ -644,11 +644,13 @@ footer .wrap{
 
 .shot-card{
   position:relative; flex-shrink:0; scroll-snap-align:start;
-  width:130px; height:230px;
-  border-radius:26px; overflow:hidden;
+  width:280px; height:170px;
+  border-radius:16px; overflow:hidden;
   border:1px solid var(--line);
   background:var(--bg);
+  box-shadow:-6px 0 16px rgba(0,0,0,0.35);
 }
+.shot-card:not(:first-child){ margin-left:-26px; }
 .shot-card img{
   width:100%; height:100%; object-fit:cover; object-position:top;
   display:block; cursor:zoom-in;
@@ -678,7 +680,8 @@ footer .wrap{
 .shot-strip-arrow:hover{ border-color:var(--teal); color:var(--teal); }
 
 @media (max-width:700px){
-  .shot-card{ width:110px; height:195px; border-radius:22px; }
+  .shot-card{ width:220px; height:135px; border-radius:14px; }
+  .shot-card:not(:first-child){ margin-left:-18px; }
   .shot-strip-arrow{ width:30px; height:30px; font-size:15px; }
 }
 

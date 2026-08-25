@@ -90,18 +90,9 @@
       </div>
       <span class="live-badge"><span class="dot"></span>Used at AppEvolve</span>
     </div>
-    <p>
-      Built to fix a real gap in how time-off requests were tracked at work.
-      Team members, projects, and approved time off all live in one place,
-      and a scheduler automatically drafts and sends Slack notifications to
-      every affected project channel — flagging which ones have new info
-      since their last notice, so nothing gets missed.
-    </p>
     <div class="stack">
       <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
     </div>
-
-    <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click a screenshot to view it larger.</div>
 
     <div class="shot-strip-wrap">
       <button class="shot-strip-arrow prev" id="shot-prev" aria-label="Scroll left">‹</button>
@@ -216,36 +207,63 @@ document.addEventListener('keydown', function(e){
   if (!strip) return;
 
   function scrollStep() {
-    const card = strip.querySelector('.shot-card');
-    if (!card) return 200;
-    const style = getComputedStyle(strip);
-    const gap = parseFloat(style.columnGap || style.gap || '16');
-    return card.getBoundingClientRect().width + gap;
+    const cards = strip.querySelectorAll('.shot-card');
+    if (cards.length < 2) return 200;
+    // Measure the actual on-screen distance between consecutive cards —
+    // accounts for the overlap automatically, at any screen size.
+    const first = cards[0].getBoundingClientRect();
+    const second = cards[1].getBoundingClientRect();
+    return second.left - first.left;
   }
 
   prevBtn.addEventListener('click', () => strip.scrollBy({ left: -scrollStep(), behavior: 'smooth' }));
   nextBtn.addEventListener('click', () => strip.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
 
-  // Mouse click-and-drag to scroll (touch already scrolls natively).
-  let isDragging = false, dragStartX = 0, scrollStart = 0;
+  // Mouse click-and-drag to scroll (touch already scrolls natively). A
+  // small movement threshold distinguishes a genuine drag from a plain
+  // click, so clicking a screenshot to open it keeps working reliably —
+  // scrollLeft is never touched, and pointer capture is never engaged,
+  // until real dragging is actually detected.
+  let isDown = false, hasDragged = false, dragStartX = 0, scrollStart = 0;
+  const DRAG_THRESHOLD = 6;
+
   strip.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'mouse') return;
-    isDragging = true;
+    isDown = true;
+    hasDragged = false;
     dragStartX = e.clientX;
     scrollStart = strip.scrollLeft;
-    strip.classList.add('dragging');
-    strip.setPointerCapture(e.pointerId);
   });
+
   strip.addEventListener('pointermove', (e) => {
-    if (!isDragging) return;
-    strip.scrollLeft = scrollStart - (e.clientX - dragStartX);
+    if (!isDown) return;
+    const delta = e.clientX - dragStartX;
+    if (!hasDragged && Math.abs(delta) > DRAG_THRESHOLD) {
+      hasDragged = true;
+      strip.classList.add('dragging');
+      try { strip.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    if (hasDragged) {
+      strip.scrollLeft = scrollStart - delta;
+    }
   });
+
   function endDrag() {
-    isDragging = false;
+    isDown = false;
     strip.classList.remove('dragging');
   }
   strip.addEventListener('pointerup', endDrag);
   strip.addEventListener('pointerleave', endDrag);
+
+  // If a real drag just happened, swallow the click it would otherwise
+  // produce on the image underneath the cursor (capture phase runs
+  // before the image's own onclick, so this blocks it cleanly).
+  strip.addEventListener('click', (e) => {
+    if (hasDragged) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
 })();
 </script>
 <script src="interactions.js"></script>
