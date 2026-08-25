@@ -94,28 +94,35 @@
       <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
     </div>
 
+    <div class="shot-hero" id="shot-hero">
+      <button class="shot-hero-arrow prev" id="hero-prev" aria-label="Previous screenshot">‹</button>
+      <img id="hero-img" src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
+      <button class="shot-hero-arrow next" id="hero-next" aria-label="Next screenshot">›</button>
+    </div>
+    <div class="shot-hero-caption" id="hero-caption">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+
     <div class="shot-strip-wrap">
       <button class="shot-strip-arrow prev" id="shot-prev" aria-label="Scroll left">‹</button>
 
       <div class="shot-strip" id="shot-strip">
         <div class="shot-card">
-          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
+          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status">
           <span class="shot-card-label">Send Notif</span>
         </div>
         <div class="shot-card">
-          <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
+          <img src="time-off-entries.png" alt="Time-off entries table with approval status">
           <span class="shot-card-label">Time-Off</span>
         </div>
         <div class="shot-card">
-          <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
+          <img src="team-members.png" alt="Team members list with employment status and holiday sets">
           <span class="shot-card-label">Team</span>
         </div>
         <div class="shot-card">
-          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
+          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens">
           <span class="shot-card-label">Settings</span>
         </div>
         <div class="shot-card">
-          <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
+          <img src="holidays.png" alt="Holiday calendar for PH and US employees">
           <span class="shot-card-label">Holidays</span>
         </div>
       </div>
@@ -133,7 +140,6 @@
     <div class="project-head">
       <div>
         <h3>BudgetFlow PH</h3>
-        <p>Personal finance tracker built for day-to-day money management</p>
       </div>
       <span class="chip teal">Live</span>
     </div>
@@ -197,6 +203,54 @@ document.addEventListener('keydown', function(e){
     document.body.style.overflow = '';
   }
 });
+
+// ── Off Duty hero: one big featured screenshot, synced with the thumbnail strip below ──
+(function () {
+  const heroImg = document.getElementById('hero-img');
+  const heroCaption = document.getElementById('hero-caption');
+  const heroPrev = document.getElementById('hero-prev');
+  const heroNext = document.getElementById('hero-next');
+  if (!heroImg) return;
+
+  const shots = [
+    { src: 'send-notif.png', alt: 'Send Notif screen listing project Slack channels with new-info flags and send status', caption: 'Send Notif — auto-drafted per project channel, flags which ones have new info since the last send' },
+    { src: 'time-off-entries.png', alt: 'Time-off entries table with approval status', caption: 'Time-Off Entries — source of truth for requests and approval status' },
+    { src: 'team-members.png', alt: 'Team members list with employment status and holiday sets', caption: 'Team Members — employment type drives which holidays auto-apply' },
+    { src: 'settings.png', alt: 'Settings screen for Jira connection and Slack workspace tokens', caption: 'Settings — Jira sync and per-workspace Slack bot tokens' },
+    { src: 'holidays.png', alt: 'Holiday calendar for PH and US employees', caption: 'Holidays — PH and US calendars, applied automatically by employment type' }
+  ];
+  let heroIndex = 0;
+
+  function showHero(i) {
+    heroIndex = (i + shots.length) % shots.length;
+    const item = shots[heroIndex];
+    heroImg.src = item.src;
+    heroImg.alt = item.alt;
+    heroCaption.textContent = item.caption;
+
+    // Highlight every thumbnail (real + looped clones) that matches.
+    document.querySelectorAll('#shot-strip .shot-card').forEach(card => {
+      const img = card.querySelector('img');
+      card.classList.toggle('active-thumb', img && img.getAttribute('src') === item.src);
+    });
+  }
+
+  heroPrev.addEventListener('click', () => showHero(heroIndex - 1));
+  heroNext.addEventListener('click', () => showHero(heroIndex + 1));
+
+  // Clicking a thumbnail (real or cloned) sends that shot to the hero,
+  // rather than jumping straight to the full-size lightbox — the hero
+  // is now the "enlarged" view; the lightbox is for zooming in further.
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('#shot-strip .shot-card');
+    if (!card) return;
+    const img = card.querySelector('img');
+    const idx = shots.findIndex(s => s.src === img.getAttribute('src'));
+    if (idx !== -1) showHero(idx);
+  });
+
+  showHero(0);
+})();
 
 // ── Off Duty screenshot strip: continuous loop + arrows + drag-to-scroll ──
 (function () {

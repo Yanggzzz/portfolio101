@@ -625,6 +625,35 @@ footer .wrap{
 }
 
 /* ---------- SHOT STRIP (Off Duty screenshots — rounded pill cards) ---------- */
+/* ---------- SHOT HERO (Off Duty featured screenshot) ---------- */
+.shot-hero{
+  position:relative;
+  width:100%;
+  margin-top:24px;
+  background:var(--bg); border:1px solid var(--line); border-radius:14px;
+  overflow:hidden;
+}
+.shot-hero img{
+  width:100%; height:auto; display:block; cursor:zoom-in;
+  transition:opacity .2s ease;
+}
+.shot-hero-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:38px; height:38px; border-radius:50%;
+  background:rgba(22,23,27,0.85); border:1px solid var(--line); color:var(--ink);
+  font-size:20px; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .15s ease, color .15s ease;
+  z-index:2;
+}
+.shot-hero-arrow:hover{ border-color:var(--teal); color:var(--teal); }
+.shot-hero-arrow.prev{ left:12px; }
+.shot-hero-arrow.next{ right:12px; }
+.shot-hero-caption{
+  font-family:var(--mono); font-size:11.5px; color:var(--muted);
+  padding:12px 4px 0;
+}
+
 .shot-strip-wrap{
   position:relative;
   margin-top:24px;
@@ -651,6 +680,10 @@ footer .wrap{
   box-shadow:-6px 0 16px rgba(0,0,0,0.35);
 }
 .shot-card:not(:first-child){ margin-left:-26px; }
+.shot-card.active-thumb{
+  outline:2px solid var(--teal); outline-offset:-2px;
+  z-index:5;
+}
 .shot-card img{
   width:100%; height:100%; object-fit:cover; object-position:top;
   display:block; cursor:zoom-in;
