@@ -230,6 +230,12 @@ section{ padding:80px 0; position:relative; z-index:1; }
 .job li::before{
   content:'→'; position:absolute; left:0; color:var(--yellow);
 }
+.job li strong{ color:var(--ink); font-weight:700; }
+.job p{ color:var(--muted); font-size:14.5px; line-height:1.65; }
+.job-subhead{
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+  text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;
+}
 
 /* ---------- SKILL CHIPS ---------- */
 .skillset{ margin-bottom:28px; }
