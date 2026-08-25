@@ -108,8 +108,72 @@ img{ max-width:100%; display:block; }
 .navlinks a:hover::after, .navlinks a.active::after{ transform:scaleX(1); }
 
 /* ---------- TICKET CHIP (status labels) ---------- */
-/* ---------- HOME HERO: ILLUSTRATION + LOADING + REVEAL ---------- */
-.hero-stage{ text-align:center; padding-bottom:20px; }
+/* ---------- HOME PAGE: SNAP-SCROLL CAROUSEL SHELL ---------- */
+body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
+
+.home-carousel{
+  position:relative;
+  height:calc(100vh - var(--nav-h, 65px));
+  height:calc(100dvh - var(--nav-h, 65px));
+  overflow:hidden;
+}
+.home-track{
+  height:100%;
+  transition:transform .6s cubic-bezier(.65,0,.35,1);
+}
+.home-slide{
+  height:calc(100vh - var(--nav-h, 65px));
+  height:calc(100dvh - var(--nav-h, 65px));
+}
+.home-slide-inner{
+  width:100%; height:100%;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  display:flex; align-items:center; justify-content:center;
+  padding:40px 32px;
+}
+.home-slide-inner::-webkit-scrollbar{ width:6px; }
+.home-slide-inner::-webkit-scrollbar-thumb{ background:var(--line); border-radius:3px; }
+
+.home-footer{
+  margin-top:56px; padding-top:24px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  max-width:60ch;
+}
+
+.home-nav{
+  position:fixed; right:28px; top:50%; transform:translateY(-50%);
+  z-index:60;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+}
+.home-arrow{
+  width:34px; height:34px; border-radius:50%;
+  background:var(--card); border:1px solid var(--line); color:var(--ink);
+  font-size:12px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.home-arrow:hover{ border-color:var(--teal); color:var(--teal); }
+.home-arrow:active{ transform:scale(0.92); }
+.home-arrow:disabled{ opacity:0.3; cursor:default; }
+.home-arrow:disabled:hover{ border-color:var(--line); color:var(--ink); }
+
+.home-dots{ display:flex; flex-direction:column; gap:10px; padding:6px 0; }
+.home-dot{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--line); cursor:pointer;
+  transition:background .15s ease, transform .15s ease;
+}
+.home-dot:hover{ transform:scale(1.25); }
+.home-dot.active{ background:var(--teal); transform:scale(1.3); }
+
+@media (max-width:760px){
+  .home-nav{ right:14px; gap:10px; }
+  .home-arrow{ width:28px; height:28px; font-size:10px; }
+}
+
+/* ---------- HOME HERO: ILLUSTRATION + LOADING BAR + REVEAL ---------- */
+.hero-stage{ text-align:center; }
 
 .hero-illo-wrap{
   position:relative;
@@ -127,20 +191,33 @@ img{ max-width:100%; display:block; }
 .hero-illo-wrap.stood .illo-b{ opacity:1; transform:translateY(0) scale(1); }
 
 /* each top-level piece of the active illustration fades/slides in with a
-   stagger on first load — see hero-animation.js */
+   stagger while the loading bar fills — see hero-animation.js */
 .illo-piece{
   opacity:0; transform:translateY(18px);
   transition:opacity .55s ease, transform .55s ease;
 }
 .illo-piece.in{ opacity:1; transform:translateY(0); }
 
-.hero-loading{
-  position:absolute; left:0; right:0; bottom:-28px;
-  font-family:var(--mono); font-size:12px; color:var(--muted);
-  text-align:center; letter-spacing:0.05em;
+.hero-loading-wrap{
+  position:absolute; left:50%; bottom:-46px; transform:translateX(-50%);
+  width:200px;
   opacity:1; transition:opacity .4s ease;
 }
-.hero-loading.done{ opacity:0; }
+.hero-loading-wrap.done{ opacity:0; }
+.hero-loading-bar-track{
+  width:100%; height:3px; border-radius:2px;
+  background:var(--line); overflow:hidden;
+}
+.hero-loading-bar{
+  width:0%; height:100%; border-radius:2px;
+  background:var(--teal);
+}
+.hero-loading{
+  margin-top:10px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  text-align:center; letter-spacing:0.05em;
+  display:flex; justify-content:center; gap:6px;
+}
 
 .hero-reveal{
   opacity:0; transform:translateY(14px);
@@ -148,7 +225,6 @@ img{ max-width:100%; display:block; }
 }
 .hero-reveal.visible{ opacity:1; transform:translateY(0); }
 .hero-reveal h1{ font-size:clamp(2rem, 4.5vw, 3rem); }
-.hero-reveal .lead{ text-align:center; }
 
 .hero-links{
   display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
