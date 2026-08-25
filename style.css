@@ -134,6 +134,19 @@ body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
 .home-slide-inner::-webkit-scrollbar{ width:6px; }
 .home-slide-inner::-webkit-scrollbar-thumb{ background:var(--line); border-radius:3px; }
 
+.about-content{ max-width:900px; }
+.about-heading{
+  font-size:clamp(2.8rem, 7vw, 5rem);
+  line-height:1;
+  margin-bottom:28px;
+}
+.about-lead{
+  font-size:clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height:1.7;
+  max-width:38ch;
+  color:var(--ink);
+}
+
 .home-footer{
   margin-top:56px; padding-top:24px; border-top:1px solid var(--line);
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
