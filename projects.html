@@ -94,40 +94,33 @@
       <span>Supabase</span><span>Vercel</span><span>Slack OAuth</span><span>Jira Sync</span><span>Vercel Cron</span>
     </div>
 
-    <div class="shot-hero" id="shot-hero">
-      <button class="shot-hero-arrow prev" id="hero-prev" aria-label="Previous screenshot">‹</button>
-      <img id="hero-img" src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
-      <button class="shot-hero-arrow next" id="hero-next" aria-label="Next screenshot">›</button>
-    </div>
-    <div class="shot-hero-caption" id="hero-caption">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+    <div class="shot-hero-carousel" id="shot-hero-carousel">
+      <button class="shot-hero-arrow prev" id="shotc-prev" aria-label="Previous screenshot">‹</button>
 
-    <div class="shot-strip-wrap">
-      <button class="shot-strip-arrow prev" id="shot-prev" aria-label="Scroll left">‹</button>
-
-      <div class="shot-strip" id="shot-strip">
-        <div class="shot-card">
-          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status">
-          <span class="shot-card-label">Send Notif</span>
+      <div class="shot-hero-track" id="shotc-track">
+        <div class="shot-hero-card">
+          <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
+          <div class="shot-hero-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
         </div>
-        <div class="shot-card">
-          <img src="time-off-entries.png" alt="Time-off entries table with approval status">
-          <span class="shot-card-label">Time-Off</span>
+        <div class="shot-hero-card">
+          <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
+          <div class="shot-hero-cap">Time-Off Entries — source of truth for requests and approval status</div>
         </div>
-        <div class="shot-card">
-          <img src="team-members.png" alt="Team members list with employment status and holiday sets">
-          <span class="shot-card-label">Team</span>
+        <div class="shot-hero-card">
+          <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
+          <div class="shot-hero-cap">Team Members — employment type drives which holidays auto-apply</div>
         </div>
-        <div class="shot-card">
-          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens">
-          <span class="shot-card-label">Settings</span>
+        <div class="shot-hero-card">
+          <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
+          <div class="shot-hero-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
         </div>
-        <div class="shot-card">
-          <img src="holidays.png" alt="Holiday calendar for PH and US employees">
-          <span class="shot-card-label">Holidays</span>
+        <div class="shot-hero-card">
+          <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
+          <div class="shot-hero-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
         </div>
       </div>
 
-      <button class="shot-strip-arrow next" id="shot-next" aria-label="Scroll right">›</button>
+      <button class="shot-hero-arrow next" id="shotc-next" aria-label="Next screenshot">›</button>
     </div>
   </div>
 </div>
@@ -204,158 +197,112 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// ── Off Duty hero: one big featured screenshot, synced with the thumbnail strip below ──
+// ── Off Duty hero carousel: one large centered screenshot with smaller
+// ── ones peeking on either side (Material's "hero" carousel pattern) ──
 (function () {
-  const heroImg = document.getElementById('hero-img');
-  const heroCaption = document.getElementById('hero-caption');
-  const heroPrev = document.getElementById('hero-prev');
-  const heroNext = document.getElementById('hero-next');
-  if (!heroImg) return;
+  const carousel = document.getElementById('shot-hero-carousel');
+  if (!carousel) return;
 
-  const shots = [
-    { src: 'send-notif.png', alt: 'Send Notif screen listing project Slack channels with new-info flags and send status', caption: 'Send Notif — auto-drafted per project channel, flags which ones have new info since the last send' },
-    { src: 'time-off-entries.png', alt: 'Time-off entries table with approval status', caption: 'Time-Off Entries — source of truth for requests and approval status' },
-    { src: 'team-members.png', alt: 'Team members list with employment status and holiday sets', caption: 'Team Members — employment type drives which holidays auto-apply' },
-    { src: 'settings.png', alt: 'Settings screen for Jira connection and Slack workspace tokens', caption: 'Settings — Jira sync and per-workspace Slack bot tokens' },
-    { src: 'holidays.png', alt: 'Holiday calendar for PH and US employees', caption: 'Holidays — PH and US calendars, applied automatically by employment type' }
-  ];
-  let heroIndex = 0;
+  const track = document.getElementById('shotc-track');
+  const cards = Array.from(track.querySelectorAll('.shot-hero-card'));
+  const prevBtn = document.getElementById('shotc-prev');
+  const nextBtn = document.getElementById('shotc-next');
 
-  function showHero(i) {
-    heroIndex = (i + shots.length) % shots.length;
-    const item = shots[heroIndex];
-    heroImg.src = item.src;
-    heroImg.alt = item.alt;
-    heroCaption.textContent = item.caption;
+  let current = 0;
 
-    // Highlight every thumbnail (real + looped clones) that matches.
-    document.querySelectorAll('#shot-strip .shot-card').forEach(card => {
-      const img = card.querySelector('img');
-      card.classList.toggle('active-thumb', img && img.getAttribute('src') === item.src);
+  function updateActive() {
+    const trackRect = track.getBoundingClientRect();
+    const centerX = trackRect.left + trackRect.width / 2;
+    const maxDist = trackRect.width / 2 + 40;
+
+    let closestIndex = 0;
+    let closestDist = Infinity;
+
+    cards.forEach((card, i) => {
+      const r = card.getBoundingClientRect();
+      const cardCenter = r.left + r.width / 2;
+      const dist = Math.abs(cardCenter - centerX);
+      const t = Math.min(dist / maxDist, 1);
+
+      const scale = 1 - t * 0.24;
+      const opacity = 1 - t * 0.45;
+      const z = Math.round(10 - t * 9);
+
+      card.style.transform = 'scale(' + scale.toFixed(3) + ')';
+      card.style.opacity = opacity.toFixed(3);
+      card.style.zIndex = z;
+      card.classList.toggle('active', t < 0.15);
+
+      if (dist < closestDist) { closestDist = dist; closestIndex = i; }
     });
+
+    current = closestIndex;
   }
 
-  heroPrev.addEventListener('click', () => showHero(heroIndex - 1));
-  heroNext.addEventListener('click', () => showHero(heroIndex + 1));
+  let rafPending = false;
+  function onScroll() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => { updateActive(); rafPending = false; });
+  }
+  track.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
 
-  // Clicking a thumbnail (real or cloned) sends that shot to the hero,
-  // rather than jumping straight to the full-size lightbox — the hero
-  // is now the "enlarged" view; the lightbox is for zooming in further.
-  document.addEventListener('click', (e) => {
-    const card = e.target.closest('#shot-strip .shot-card');
-    if (!card) return;
-    const img = card.querySelector('img');
-    const idx = shots.findIndex(s => s.src === img.getAttribute('src'));
-    if (idx !== -1) showHero(idx);
-  });
-
-  showHero(0);
-})();
-
-// ── Off Duty screenshot strip: continuous loop + arrows + drag-to-scroll ──
-(function () {
-  const strip = document.getElementById('shot-strip');
-  const prevBtn = document.getElementById('shot-prev');
-  const nextBtn = document.getElementById('shot-next');
-  if (!strip) return;
-
-  // ---- Build a seamless loop: [clone][real][clone] ----
-  // Scrolling lives in the middle (real) set. Once you drift into either
-  // clone set, we silently jump back by exactly one set-width once the
-  // scroll settles — since the clones are pixel-identical to the real
-  // cards, the jump is invisible.
-  const realCards = Array.from(strip.children);
-  const realCount = realCards.length;
-
-  realCards.map(c => c.cloneNode(true)).reverse().forEach(c => strip.insertBefore(c, strip.firstChild));
-  realCards.map(c => c.cloneNode(true)).forEach(c => strip.appendChild(c));
-
-  function allCards() { return strip.children; }
-
-  function scrollStep() {
-    const cards = allCards();
-    if (cards.length < 2) return 200;
-    const first = cards[0].getBoundingClientRect();
-    const second = cards[1].getBoundingClientRect();
-    return second.left - first.left;
+  function scrollToIndex(index) {
+    index = Math.max(0, Math.min(cards.length - 1, index));
+    const card = cards[index];
+    const target = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+    track.scrollTo({ left: target, behavior: 'smooth' });
   }
 
-  function realStartX() { return allCards()[realCount].offsetLeft; }
-  function afterCloneStartX() { return allCards()[realCount * 2].offsetLeft; }
-
-  // Land in the middle (real) section on load, no animation.
-  requestAnimationFrame(() => {
-    strip.scrollLeft = realStartX();
-  });
-
-  function correctLoop() {
-    const setWidth = afterCloneStartX() - realStartX();
-    if (setWidth <= 0) return;
-    if (strip.scrollLeft >= afterCloneStartX()) {
-      strip.scrollLeft -= setWidth;
-    } else if (strip.scrollLeft < realStartX() - 1) {
-      strip.scrollLeft += setWidth;
-    }
-  }
-
-  if ('onscrollend' in window) {
-    strip.addEventListener('scrollend', correctLoop);
-  } else {
-    let settleTimer;
-    strip.addEventListener('scroll', () => {
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(correctLoop, 90);
-    }, { passive: true });
-  }
-
-  prevBtn.addEventListener('click', () => strip.scrollBy({ left: -scrollStep(), behavior: 'smooth' }));
-  nextBtn.addEventListener('click', () => strip.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
+  prevBtn.addEventListener('click', () => scrollToIndex(current - 1));
+  nextBtn.addEventListener('click', () => scrollToIndex(current + 1));
 
   // Mouse click-and-drag to scroll (touch already scrolls natively). A
   // small movement threshold distinguishes a genuine drag from a plain
-  // click, so clicking a screenshot to open it keeps working reliably —
-  // scrollLeft is never touched, and pointer capture is never engaged,
-  // until real dragging is actually detected.
+  // click, so clicking the active screenshot to open the lightbox keeps
+  // working reliably.
   let isDown = false, hasDragged = false, dragStartX = 0, scrollStart = 0;
   const DRAG_THRESHOLD = 6;
 
-  strip.addEventListener('pointerdown', (e) => {
+  track.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'mouse') return;
     isDown = true;
     hasDragged = false;
     dragStartX = e.clientX;
-    scrollStart = strip.scrollLeft;
+    scrollStart = track.scrollLeft;
   });
 
-  strip.addEventListener('pointermove', (e) => {
+  track.addEventListener('pointermove', (e) => {
     if (!isDown) return;
     const delta = e.clientX - dragStartX;
     if (!hasDragged && Math.abs(delta) > DRAG_THRESHOLD) {
       hasDragged = true;
-      strip.classList.add('dragging');
-      try { strip.setPointerCapture(e.pointerId); } catch (err) {}
+      track.classList.add('dragging');
+      try { track.setPointerCapture(e.pointerId); } catch (err) {}
     }
     if (hasDragged) {
-      strip.scrollLeft = scrollStart - delta;
+      track.scrollLeft = scrollStart - delta;
     }
   });
 
   function endDrag() {
+    if (!hasDragged) { isDown = false; return; }
     isDown = false;
-    strip.classList.remove('dragging');
+    track.classList.remove('dragging');
+    scrollToIndex(current);
   }
-  strip.addEventListener('pointerup', endDrag);
-  strip.addEventListener('pointerleave', endDrag);
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointerleave', endDrag);
 
-  // If a real drag just happened, swallow the click it would otherwise
-  // produce on the image underneath the cursor (capture phase runs
-  // before the image's own onclick, so this blocks it cleanly).
-  strip.addEventListener('click', (e) => {
+  track.addEventListener('click', (e) => {
     if (hasDragged) {
       e.preventDefault();
       e.stopPropagation();
     }
   }, true);
+
+  updateActive();
 })();
 </script>
 <script src="interactions.js"></script>
