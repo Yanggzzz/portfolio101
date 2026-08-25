@@ -39,4 +39,23 @@
       ticket.style.setProperty('--my', my + '%');
     });
   });
+
+  // 3D tilt on the contact page business card — follows the cursor like
+  // you're turning a real card in your hand to catch the light.
+  const bizCard = document.getElementById('business-card');
+  if (bizCard) {
+    const maxTilt = 14;
+    bizCard.addEventListener('mousemove', (e) => {
+      const rect = bizCard.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      const rotateY = px * maxTilt * 2;
+      const rotateX = -py * maxTilt * 2;
+      bizCard.style.transform =
+        'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.04)';
+    });
+    bizCard.addEventListener('mouseleave', () => {
+      bizCard.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
 })();
