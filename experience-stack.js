@@ -45,3 +45,32 @@
   // Initial position — wait a tick so fonts/layout have settled.
   requestAnimationFrame(() => moveHighlightTo(tabs[0]));
 })();
+
+// ===== Certifications panel: "on this page" nav =====
+// Clicking a title/date link smooth-scrolls to that certificate (native
+// anchor links + the site's global smooth-scroll handle the animation).
+// A scrollspy highlights whichever certificate is currently in view.
+(function () {
+  const certNav = document.getElementById('cert-nav');
+  if (!certNav) return; // not the Experience page
+
+  const navLinks = Array.from(certNav.querySelectorAll('.cert-nav-link'));
+  const entries = Array.from(document.querySelectorAll('.cert-entry'));
+
+  function setActiveLink(id) {
+    navLinks.forEach(link => link.classList.toggle('active', link.dataset.target === id));
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((observedEntries) => {
+      observedEntries.forEach(entry => {
+        if (entry.isIntersecting) setActiveLink(entry.target.id);
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    entries.forEach(entry => observer.observe(entry));
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => setActiveLink(link.dataset.target));
+  });
+})();
