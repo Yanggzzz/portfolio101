@@ -5,8 +5,12 @@
   document.documentElement.classList.add('js-ready');
 
   // Auto-tag common components as reveal targets (no HTML edits needed).
+  // Content inside the Experience page's stacked tiles is excluded — it's
+  // shown/hidden by expand state, not scroll position, so a separate
+  // scroll-triggered fade would fight with that or never fire visibly.
   const revealSelectors = '.card, .job, .cert-card, .testimonial-card, .project-tile, .skillset';
-  const revealEls = document.querySelectorAll(revealSelectors);
+  const revealEls = Array.from(document.querySelectorAll(revealSelectors))
+    .filter(el => !el.closest('.tile-body-wrap'));
   revealEls.forEach(el => el.classList.add('reveal'));
 
   if ('IntersectionObserver' in window) {
@@ -23,8 +27,10 @@
     revealEls.forEach(el => el.classList.add('in-view'));
   }
 
-  // Stagger skill chips within each skillset as it reveals.
+  // Stagger skill chips within each skillset as it reveals (skip tiles —
+  // handled by their own expand transition instead).
   document.querySelectorAll('.skillset').forEach(group => {
+    if (group.closest('.tile-body-wrap')) return;
     const chips = group.querySelectorAll('.skill');
     chips.forEach((chip, i) => { chip.style.transitionDelay = (i * 40) + 'ms'; });
   });
