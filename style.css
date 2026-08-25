@@ -245,12 +245,23 @@ body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
 }
 .hero-links a{
   font-family:var(--mono); font-size:13px; text-transform:uppercase;
-  letter-spacing:0.05em; color:var(--muted);
-  border:1px solid var(--line); padding:12px 24px; border-radius:8px;
+  letter-spacing:0.05em; color:var(--teal);
+  border:1px solid var(--teal); padding:12px 24px; border-radius:8px;
   text-decoration:none;
-  transition:border-color .2s ease, color .2s ease, transform .2s ease;
+  animation:heroGlow 2.4s ease-in-out infinite;
+  transition:color .2s ease, transform .2s ease;
 }
-.hero-links a:hover{ border-color:var(--teal); color:var(--teal); transform:translateY(-2px); }
+.hero-links a:hover{ color:var(--yellow); transform:translateY(-2px); }
+@keyframes heroGlow{
+  0%, 100%{ box-shadow:0 0 6px rgba(240,191,108,0.25), 0 0 0 rgba(240,191,108,0); }
+  50%{ box-shadow:0 0 18px rgba(240,191,108,0.55), 0 0 5px rgba(240,191,108,0.3); }
+}
+
+/* status chips in the hero read as calm/neutral info, not action items,
+   so they stay muted instead of competing with the glowing buttons above */
+.hero-reveal .chip.teal, .hero-reveal .chip.yellow{
+  color:var(--muted); border-color:var(--line);
+}
 
 @media (max-width:600px){
   .hero-illo-wrap{ width:280px; }
