@@ -311,7 +311,7 @@ body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
 /* ---------- CONTACT: BUSINESS CARD ---------- */
 .card-stack{
   position:relative;
-  width:440px; max-width:90vw;
+  width:600px; max-width:92vw;
   aspect-ratio:1.75/1;
   margin-top:56px;
   perspective:900px;
@@ -328,7 +328,7 @@ body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
   position:relative; z-index:2;
   width:100%; height:100%;
   background:var(--card); border:1px solid var(--line); border-radius:16px;
-  padding:26px 30px;
+  padding:38px 46px;
   overflow:hidden;
   box-shadow:0 14px 32px rgba(0,0,0,0.35);
   transform-style:preserve-3d; will-change:transform;
@@ -341,23 +341,23 @@ body.home-page{ height:100vh; height:100dvh; overflow:hidden; }
   position:absolute; left:0; top:0; bottom:0; width:5px;
   background:linear-gradient(180deg, var(--teal), var(--yellow));
 }
-.bc-name{ font-family:var(--display); font-weight:700; font-size:1.25rem; color:var(--ink); }
+.bc-name{ font-family:var(--display); font-weight:700; font-size:1.7rem; color:var(--ink); }
 .bc-title{
-  font-family:var(--mono); font-size:10.5px; color:var(--muted);
-  text-transform:uppercase; letter-spacing:0.06em; margin-top:5px;
+  font-family:var(--mono); font-size:13px; color:var(--muted);
+  text-transform:uppercase; letter-spacing:0.06em; margin-top:7px;
 }
-.bc-divider{ height:1px; background:var(--line); margin:14px 0; }
-.bc-rows{ display:flex; flex-direction:column; gap:9px; }
+.bc-divider{ height:1px; background:var(--line); margin:20px 0; }
+.bc-rows{ display:flex; flex-direction:column; gap:13px; }
 .bc-row{
   display:flex; justify-content:space-between; align-items:baseline;
   gap:14px; flex-wrap:wrap;
 }
 .bc-label{
-  font-family:var(--mono); font-size:10px; color:var(--muted);
+  font-family:var(--mono); font-size:12px; color:var(--muted);
   text-transform:uppercase; letter-spacing:0.07em; flex-shrink:0;
 }
 .bc-value{
-  font-family:var(--mono); font-size:11.5px; color:var(--ink);
+  font-family:var(--mono); font-size:14.5px; color:var(--ink);
   text-decoration:none; text-align:right; word-break:break-word;
   transition:color .2s ease;
 }
