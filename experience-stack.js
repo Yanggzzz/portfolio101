@@ -1,34 +1,38 @@
-// ===== Experience page: stacked accordion tiles =====
-// Desktop: hovering a tile opens it (accordion — only one open at a time).
-// Mobile/touch: tapping a tile's header toggles it open/closed, since
-// there's no hover to rely on.
+// ===== Experience page: overlapping card-deck tiles =====
+// Hover lifts a card (pure CSS :hover — no JS needed for that part).
+// Clicking a card's header grows it in place to reveal its content;
+// clicking it again, clicking empty deck space, or pressing Escape
+// closes it back into the stack.
 (function () {
   const stack = document.getElementById('tile-stack');
   if (!stack) return; // not the Experience page
 
   const tiles = Array.from(stack.querySelectorAll('.stack-tile'));
-  const canHover = window.matchMedia('(hover: hover)').matches;
 
-  function openTile(tile) {
+  function setExpanded(tile) {
     tiles.forEach(t => t.classList.toggle('expanded', t === tile));
+    stack.classList.add('has-expanded');
+  }
+
+  function collapseAll() {
+    tiles.forEach(t => t.classList.remove('expanded'));
+    stack.classList.remove('has-expanded');
   }
 
   tiles.forEach(tile => {
     const head = tile.querySelector('.tile-head');
-
-    // Desktop: hover to preview/open.
-    if (canHover) {
-      tile.addEventListener('mouseenter', () => openTile(tile));
-    }
-
-    // All devices: click/tap the header toggles it directly.
     head.addEventListener('click', () => {
       const isOpen = tile.classList.contains('expanded');
-      if (isOpen) {
-        tile.classList.remove('expanded');
-      } else {
-        openTile(tile);
-      }
+      isOpen ? collapseAll() : setExpanded(tile);
     });
+  });
+
+  // Click on empty deck background (not on any card) closes the open one.
+  stack.addEventListener('click', (e) => {
+    if (e.target === stack) collapseAll();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') collapseAll();
   });
 })();
