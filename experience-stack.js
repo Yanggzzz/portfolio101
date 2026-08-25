@@ -46,31 +46,37 @@
   requestAnimationFrame(() => moveHighlightTo(tabs[0]));
 })();
 
-// ===== Certifications panel: "on this page" nav =====
-// Clicking a title/date link smooth-scrolls to that certificate (native
-// anchor links + the site's global smooth-scroll handle the animation).
-// A scrollspy highlights whichever certificate is currently in view.
+// ===== "On this page" nav (Certifications, Recognition & Testimonials) =====
+// Clicking a title/date link smooth-scrolls to that entry (native anchor
+// links + the site's global smooth-scroll handle the animation). A
+// scrollspy highlights whichever entry is currently in view. Each
+// .cert-nav on the page is wired up independently, scoped to its own
+// entries only, so multiple sections can each have their own widget.
 (function () {
-  const certNav = document.getElementById('cert-nav');
-  if (!certNav) return; // not the Experience page
+  const navs = Array.from(document.querySelectorAll('.cert-nav'));
+  if (navs.length === 0) return; // not the Experience page
 
-  const navLinks = Array.from(certNav.querySelectorAll('.cert-nav-link'));
-  const entries = Array.from(document.querySelectorAll('.cert-entry'));
+  navs.forEach(nav => {
+    const navLinks = Array.from(nav.querySelectorAll('.cert-nav-link'));
+    const entries = navLinks
+      .map(link => document.getElementById(link.dataset.target))
+      .filter(Boolean);
 
-  function setActiveLink(id) {
-    navLinks.forEach(link => link.classList.toggle('active', link.dataset.target === id));
-  }
+    function setActiveLink(id) {
+      navLinks.forEach(link => link.classList.toggle('active', link.dataset.target === id));
+    }
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((observedEntries) => {
-      observedEntries.forEach(entry => {
-        if (entry.isIntersecting) setActiveLink(entry.target.id);
-      });
-    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
-    entries.forEach(entry => observer.observe(entry));
-  }
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((observedEntries) => {
+        observedEntries.forEach(entry => {
+          if (entry.isIntersecting) setActiveLink(entry.target.id);
+        });
+      }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+      entries.forEach(entry => observer.observe(entry));
+    }
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => setActiveLink(link.dataset.target));
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => setActiveLink(link.dataset.target));
+    });
   });
 })();
