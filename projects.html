@@ -103,40 +103,33 @@
 
     <div class="shot-note"><span class="flag">●</span> Screenshots from the live app, with team member names, client project names, and Slack tokens blacked out. Click a screenshot to view it larger.</div>
 
-    <div class="carousel">
-      <div class="carousel-track">
-        <div class="carousel-slide active">
+    <div class="shot-strip-wrap">
+      <button class="shot-strip-arrow prev" id="shot-prev" aria-label="Scroll left">‹</button>
+
+      <div class="shot-strip" id="shot-strip">
+        <div class="shot-card">
           <img src="send-notif.png" alt="Send Notif screen listing project Slack channels with new-info flags and send status" onclick="openLightbox(this)">
-          <div class="shot-cap">Send Notif — auto-drafted per project channel, flags which ones have new info since the last send</div>
+          <span class="shot-card-label">Send Notif</span>
         </div>
-        <div class="carousel-slide">
+        <div class="shot-card">
           <img src="time-off-entries.png" alt="Time-off entries table with approval status" onclick="openLightbox(this)">
-          <div class="shot-cap">Time-Off Entries — source of truth for requests and approval status</div>
+          <span class="shot-card-label">Time-Off</span>
         </div>
-        <div class="carousel-slide">
+        <div class="shot-card">
           <img src="team-members.png" alt="Team members list with employment status and holiday sets" onclick="openLightbox(this)">
-          <div class="shot-cap">Team Members — employment type drives which holidays auto-apply</div>
+          <span class="shot-card-label">Team</span>
         </div>
-        <div class="carousel-slide">
+        <div class="shot-card">
           <img src="settings.png" alt="Settings screen for Jira connection and Slack workspace tokens" onclick="openLightbox(this)">
-          <div class="shot-cap">Settings — Jira sync and per-workspace Slack bot tokens</div>
+          <span class="shot-card-label">Settings</span>
         </div>
-        <div class="carousel-slide">
+        <div class="shot-card">
           <img src="holidays.png" alt="Holiday calendar for PH and US employees" onclick="openLightbox(this)">
-          <div class="shot-cap">Holidays — PH and US calendars, applied automatically by employment type</div>
+          <span class="shot-card-label">Holidays</span>
         </div>
       </div>
 
-      <button class="carousel-arrow prev" onclick="carouselMove(-1)" aria-label="Previous screenshot">‹</button>
-      <button class="carousel-arrow next" onclick="carouselMove(1)" aria-label="Next screenshot">›</button>
-
-      <div class="carousel-dots">
-        <span class="carousel-dot active" onclick="carouselGoTo(0)"></span>
-        <span class="carousel-dot" onclick="carouselGoTo(1)"></span>
-        <span class="carousel-dot" onclick="carouselGoTo(2)"></span>
-        <span class="carousel-dot" onclick="carouselGoTo(3)"></span>
-        <span class="carousel-dot" onclick="carouselGoTo(4)"></span>
-      </div>
+      <button class="shot-strip-arrow next" id="shot-next" aria-label="Scroll right">›</button>
     </div>
   </div>
 </div>
@@ -168,7 +161,7 @@
   </div>
 </div>
 
-<!-- ===== Screenshot lightbox (used inside the Off Duty carousel) ===== -->
+<!-- ===== Screenshot lightbox (used inside the Off Duty shot strip) ===== -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
   <img id="lightbox-img" src="" alt="">
@@ -215,17 +208,45 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// ── Off Duty screenshot carousel ──
-let carouselIndex = 0;
-function carouselShow(i){
-  const slides = document.querySelectorAll('.carousel-slide');
-  const dots = document.querySelectorAll('.carousel-dot');
-  carouselIndex = (i + slides.length) % slides.length;
-  slides.forEach((s, idx) => s.classList.toggle('active', idx === carouselIndex));
-  dots.forEach((d, idx) => d.classList.toggle('active', idx === carouselIndex));
-}
-function carouselMove(delta){ carouselShow(carouselIndex + delta); }
-function carouselGoTo(i){ carouselShow(i); }
+// ── Off Duty screenshot strip: arrow buttons + drag-to-scroll ──
+(function () {
+  const strip = document.getElementById('shot-strip');
+  const prevBtn = document.getElementById('shot-prev');
+  const nextBtn = document.getElementById('shot-next');
+  if (!strip) return;
+
+  function scrollStep() {
+    const card = strip.querySelector('.shot-card');
+    if (!card) return 200;
+    const style = getComputedStyle(strip);
+    const gap = parseFloat(style.columnGap || style.gap || '16');
+    return card.getBoundingClientRect().width + gap;
+  }
+
+  prevBtn.addEventListener('click', () => strip.scrollBy({ left: -scrollStep(), behavior: 'smooth' }));
+  nextBtn.addEventListener('click', () => strip.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
+
+  // Mouse click-and-drag to scroll (touch already scrolls natively).
+  let isDragging = false, dragStartX = 0, scrollStart = 0;
+  strip.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    isDragging = true;
+    dragStartX = e.clientX;
+    scrollStart = strip.scrollLeft;
+    strip.classList.add('dragging');
+    strip.setPointerCapture(e.pointerId);
+  });
+  strip.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    strip.scrollLeft = scrollStart - (e.clientX - dragStartX);
+  });
+  function endDrag() {
+    isDragging = false;
+    strip.classList.remove('dragging');
+  }
+  strip.addEventListener('pointerup', endDrag);
+  strip.addEventListener('pointerleave', endDrag);
+})();
 </script>
 <script src="interactions.js"></script>
 
