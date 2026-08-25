@@ -60,6 +60,7 @@ img{ max-width:100%; display:block; }
   position:relative;
   z-index:1;
 }
+.wrap-wide{ max-width:1600px; }
 
 /* ---------- STATUS BAR / NAV ---------- */
 .statusbar{
@@ -542,6 +543,7 @@ body{ animation:pageFadeIn .5s ease both; }
 
 .exp-panel{ display:none; }
 .exp-panel.active{ display:block; }
+.exp-panels{ max-width:1000px; margin:0 auto; }
 
 @media (max-width:760px){
   .exp-tab{ padding:12px 16px; font-size:13px; }
