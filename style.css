@@ -508,7 +508,7 @@ body{ animation:pageFadeIn .5s ease both; }
 
 /* ---------- EXPERIENCE PAGE: TAB BAR ---------- */
 .exp-tabs-wrap{
-  display:flex; justify-content:center;
+  display:flex; justify-content:center; justify-content:safe center;
   overflow-x:auto; -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none;
   margin-bottom:44px;
