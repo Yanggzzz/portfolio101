@@ -506,12 +506,12 @@ body{ animation:pageFadeIn .5s ease both; }
   padding:36px 0 8px;
 }
 .exp-track{
-  display:flex; gap:28px;
+  display:flex; gap:16px; align-items:flex-end;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none;
-  padding:20px calc(50% - min(260px, 41vw));
+  padding:20px calc(50% - min(260px, 41vw)) 0;
   cursor:grab;
 }
 .exp-track::-webkit-scrollbar{ display:none; }
@@ -523,15 +523,16 @@ body{ animation:pageFadeIn .5s ease both; }
   background:var(--card); border:1px solid var(--line); border-radius:18px;
   box-shadow:0 10px 24px rgba(0,0,0,0.3);
   display:flex; flex-direction:column; overflow:hidden;
-  transform:scale(0.84); opacity:0.4;
-  transition:transform .35s cubic-bezier(.34,1.2,.64,1), opacity .35s ease,
+  transform-origin:center bottom;
+  transition:transform .12s linear, opacity .12s linear,
              box-shadow .35s ease, border-color .3s ease;
+  /* transform, opacity, and z-index below are driven continuously by JS
+     as you drag/scroll, so the card grows smoothly the closer it gets
+     to center instead of snapping between two fixed states */
 }
 .exp-card.active{
-  transform:scale(1); opacity:1;
   border-color:var(--teal);
   box-shadow:0 26px 54px rgba(0,0,0,0.45);
-  z-index:5;
 }
 
 .exp-head{

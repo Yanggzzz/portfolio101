@@ -1,7 +1,7 @@
 // ===== Experience page: horizontal peek carousel =====
-// The centered card is "active" (bigger, full detail). Others peek in
-// smaller and dimmed on either side. Navigate by dragging/swiping the
-// track, clicking the arrows, clicking a dot, or arrow keys.
+// The centered card grows to full size with a bottom-anchored scale, so it
+// visually "stands taller" like a fanned deck — sizing is recalculated
+// continuously as you drag, not just switched on/off at rest.
 (function () {
   const carousel = document.getElementById('exp-carousel');
   if (!carousel) return; // not the Experience page
@@ -15,10 +15,12 @@
   let current = 0;
   let rafPending = false;
 
-  // ---- Figure out which card is nearest the center, scale/dim the rest ----
+  // ---- Size/dim/layer every card continuously based on live distance
+  //      from center, and track which one is currently closest ----
   function updateActive() {
     const trackRect = track.getBoundingClientRect();
     const centerX = trackRect.left + trackRect.width / 2;
+    const maxDist = trackRect.width / 2 + 40;
 
     let closestIndex = 0;
     let closestDist = Infinity;
@@ -27,6 +29,16 @@
       const r = card.getBoundingClientRect();
       const cardCenter = r.left + r.width / 2;
       const dist = Math.abs(cardCenter - centerX);
+      const t = Math.min(dist / maxDist, 1); // 0 = centered, 1 = far off to the side
+
+      const scale = 1 - t * 0.22;   // full size at center, ~78% at the edges
+      const opacity = 1 - t * 0.35; // fully visible at center, still readable at the edges
+      const z = Math.round(10 - t * 9);
+
+      card.style.transform = 'scale(' + scale.toFixed(3) + ')';
+      card.style.opacity = opacity.toFixed(3);
+      card.style.zIndex = z;
+
       if (dist < closestDist) { closestDist = dist; closestIndex = i; }
     });
 
