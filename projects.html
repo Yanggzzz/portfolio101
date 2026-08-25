@@ -199,21 +199,60 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// ── Off Duty screenshot strip: arrow buttons + drag-to-scroll ──
+// ── Off Duty screenshot strip: continuous loop + arrows + drag-to-scroll ──
 (function () {
   const strip = document.getElementById('shot-strip');
   const prevBtn = document.getElementById('shot-prev');
   const nextBtn = document.getElementById('shot-next');
   if (!strip) return;
 
+  // ---- Build a seamless loop: [clone][real][clone] ----
+  // Scrolling lives in the middle (real) set. Once you drift into either
+  // clone set, we silently jump back by exactly one set-width once the
+  // scroll settles — since the clones are pixel-identical to the real
+  // cards, the jump is invisible.
+  const realCards = Array.from(strip.children);
+  const realCount = realCards.length;
+
+  realCards.map(c => c.cloneNode(true)).reverse().forEach(c => strip.insertBefore(c, strip.firstChild));
+  realCards.map(c => c.cloneNode(true)).forEach(c => strip.appendChild(c));
+
+  function allCards() { return strip.children; }
+
   function scrollStep() {
-    const cards = strip.querySelectorAll('.shot-card');
+    const cards = allCards();
     if (cards.length < 2) return 200;
-    // Measure the actual on-screen distance between consecutive cards —
-    // accounts for the overlap automatically, at any screen size.
     const first = cards[0].getBoundingClientRect();
     const second = cards[1].getBoundingClientRect();
     return second.left - first.left;
+  }
+
+  function realStartX() { return allCards()[realCount].offsetLeft; }
+  function afterCloneStartX() { return allCards()[realCount * 2].offsetLeft; }
+
+  // Land in the middle (real) section on load, no animation.
+  requestAnimationFrame(() => {
+    strip.scrollLeft = realStartX();
+  });
+
+  function correctLoop() {
+    const setWidth = afterCloneStartX() - realStartX();
+    if (setWidth <= 0) return;
+    if (strip.scrollLeft >= afterCloneStartX()) {
+      strip.scrollLeft -= setWidth;
+    } else if (strip.scrollLeft < realStartX() - 1) {
+      strip.scrollLeft += setWidth;
+    }
+  }
+
+  if ('onscrollend' in window) {
+    strip.addEventListener('scrollend', correctLoop);
+  } else {
+    let settleTimer;
+    strip.addEventListener('scroll', () => {
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(correctLoop, 90);
+    }, { passive: true });
   }
 
   prevBtn.addEventListener('click', () => strip.scrollBy({ left: -scrollStep(), behavior: 'smooth' }));
